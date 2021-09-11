@@ -33,12 +33,19 @@ def temp(update, context):
     msg = subprocess.check_output("vcgencmd measure_temp", shell=True).decode("ascii")
     context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
 
+def pic(update, context):
+    pass
+
+def shutdown(update, context):
+    subprocess.run("shutdown now")
+
 def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
 
 start_handler = CommandHandler('start', start)
 ip_handler = CommandHandler('ip', ip)
 temp_handler = CommandHandler('temp', temp)
+shutdown_handler = CommandHandler('shutdown', shutdown)
 unknown_handler = MessageHandler(Filters.command, unknown)
 
 dispatcher.add_handler(start_handler)
