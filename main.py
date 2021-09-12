@@ -37,7 +37,7 @@ def pic(update, context):
     pass
 
 def shutdown(update, context):
-    subprocess.run("shutdown now")
+    subprocess.run("sudo shutdown now")
 
 def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
@@ -51,6 +51,7 @@ unknown_handler = MessageHandler(Filters.command, unknown)
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(ip_handler)
 dispatcher.add_handler(temp_handler)
+dispatcher.add_handler(shutdown_handler)
 dispatcher.add_handler(unknown_handler)
 
 updater.start_polling()
