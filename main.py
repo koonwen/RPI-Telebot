@@ -35,16 +35,20 @@ def temp(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
 
 def pic(update, context):
-    with PiCamera() as camera:
-        camera.resolution = (1024, 768)
-        camera.start_preview()
+#    with PiCamera() as camera:
+#        camera.resolution = (1024, 768)
+#        camera.start_preview()
         # Camera warm-up time
-        time.sleep(2)
-        camera.capture('pic.jpg', resize=(640, 480))
-    context.bot.send_photo(USER_ID, open('~/pic.jpg', 'rb'))
+#        time.sleep(2)
+#        camera.capture('pic.jpg', resize=(640, 480))
+#    os.system("sudo systemctl stop detection.service")
+    context.bot.send_photo(USER_ID, open('/home/pi/RPI-Telebot/pic.jpg', 'rb'))
+#    os.system("sudo systemctl start detection.service")
+
 
 def shutdown(update, context):
-    subprocess.run("sudo shutdown now")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Starting shutting down sequence in 5 seconds")
+    os.system('sudo shutdown -h -t 5 now')
 
 def unknown(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
