@@ -28,11 +28,11 @@ def start(update, context):
 
 def ip(update, context):
     msg = subprocess.check_output("hostname -I", shell=True).decode('ascii')
-    context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
+    context.bot.send_message(chat_id=USER_ID, text=msg)
 
 def temp(update, context):
     msg = subprocess.check_output("vcgencmd measure_temp", shell=True).decode("ascii")
-    context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
+    context.bot.send_message(chat_id=USER_ID, text=msg)
 
 def pic(update, context):
 #    with PiCamera() as camera:
@@ -45,9 +45,18 @@ def pic(update, context):
     context.bot.send_photo(USER_ID, open('/home/pi/RPI-Telebot/pic.jpg', 'rb'))
 #    os.system("sudo systemctl start detection.service")
 
+def firewallup(update, context):
+    os.system('sudo ufw delete limit ssh')
+    msg = subprocess.check_output("sudo ufw status", shell=True).decode("ascii")
+    context.bot.send_message(chat_id=USER_ID, text=msg)
+
+def firewalldown(update, context):
+    os.system('sudo ufw limit ssh')
+    msg = subprocess.check_output("sudo ufw status", shell=True).decode("ascii")
+    context.bot.send_message(chat_id=USER_ID, text=msg)
 
 def shutdown(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Starting shutting down sequence in 5 seconds")
+    context.bot.send_message(chat_id=USER_ID, text="Starting shutting down sequence in 5 seconds")
     os.system('sudo shutdown -h -t 5 now')
 
 def unknown(update, context):
@@ -57,6 +66,8 @@ start_handler = CommandHandler('start', start)
 ip_handler = CommandHandler('ip', ip)
 temp_handler = CommandHandler('temp', temp)
 pic_handler = CommandHandler('pic', pic)
+firewallup_handler = CommandHandler('fwup', firewallup)
+firewalldown_handler = CommandHandler('fwdn', firewalldown)
 shutdown_handler = CommandHandler('shutdown', shutdown)
 unknown_handler = MessageHandler(Filters.command, unknown)
 
@@ -64,6 +75,8 @@ dispatcher.add_handler(start_handler)
 dispatcher.add_handler(ip_handler)
 dispatcher.add_handler(temp_handler)
 dispatcher.add_handler(pic_handler)
+dispatcher.add_handler(firewallup_handler)
+dispatcher.add_handler(firewalldown_handler)
 dispatcher.add_handler(shutdown_handler)
 dispatcher.add_handler(unknown_handler)
 
