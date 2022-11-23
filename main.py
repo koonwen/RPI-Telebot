@@ -26,6 +26,10 @@ bot.send_message(chat_id=USER_ID, text=f"I'm up and running at {msg}")
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, please talk to me!")
 
+def latest(update, context):
+    msg = subprocess.check_output("python3 ~/raspi_person_counter/tensor-flow/package/getlatest.py", shell=True).decode("ascii")
+    context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
+
 def ip(update, context):
     msg = subprocess.check_output("hostname -I", shell=True).decode('ascii')
     context.bot.send_message(chat_id=USER_ID, text=msg)
